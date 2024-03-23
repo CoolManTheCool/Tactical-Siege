@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b6dtt0bbboei4"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ousv6"]
+radial_segments = 512
+rings = 512
+
+[node name="Planet" type="Node3D"]
+
+[node name="Planet Terrian" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_ousv6")
