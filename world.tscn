@@ -78,6 +78,7 @@ text = "Tactical Siege"
 label_settings = SubResource("LabelSettings_3psr2")
 
 [node name="Splash" type="Label" parent="GUI/Main Menu/Panel"]
+layout_mode = 0
 offset_left = 729.0
 offset_top = 80.0
 offset_right = 833.0
