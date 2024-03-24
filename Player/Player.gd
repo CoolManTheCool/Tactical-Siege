@@ -26,15 +26,15 @@ var just_exited: bool = false
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
 	$"../".server_closed.connect(_self_delete)
+	is_me = is_multiplayer_authority()
+	$Head/Camera3D.current = is_me
+	$"Body-3".visible = !is_me
 
 func _self_delete():
 	queue_free()
 	
 func _ready():
-	is_me = is_multiplayer_authority()
-	$Head/Camera3D.current = is_me
-	$"Body-3".visible = !is_me
-	
+	pass
 
 func _physics_process(delta):
 	if(is_me):

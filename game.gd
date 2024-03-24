@@ -1,13 +1,10 @@
 extends Node3D
 
-enum GameState { PAUSED, FIGHTING, MAIN_MENU }
-signal server_closed
-@export var current_state: GameState = GameState.MAIN_MENU
 var peer = ENetMultiplayerPeer.new()
 @export var player_scene : PackedScene = load("res://Player/player.tscn")
 
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	pass
 
 func _process(_delta):
 	if Input.is_action_just_pressed("fullscreen"):
@@ -16,43 +13,21 @@ func _process(_delta):
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	
-	if current_state == GameState.PAUSED and Input.is_action_just_pressed("pause"):
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		current_state = GameState.FIGHTING
-	elif current_state == GameState.FIGHTING and Input.is_action_just_pressed("pause"):
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		current_state = GameState.PAUSED
-
-	if Input.is_action_pressed("quit"):
-		close_game("close game button was pressed.")
-	if Input.is_action_pressed("host_terminate") and multiplayer.is_server():
-		rpc("_server_terminate", "Host's terminate button was pressed.")
-		# print_tree_pretty()
+	if Input.is_action_just_pressed("pause"):
+		if $"GUI/Main Menu".visible == true:
+			close_game()
 		
-	# push_warning($CanvasLayer.visible)
-	# push_warning(current_state)
 
-@rpc("reliable", "authority", "call_local")
-func _server_terminate(why):
-	$"Server Menu/Panel".show()
-	current_state = GameState.MAIN_MENU
-	server_closed.emit()
-	print("Server terminated with code: ", why)
-	multiplayer.multiplayer_peer.close()
-	# go to return to main menu, if your not the server
-	
-	
-func close_game(why):
+func close_game():
 	if multiplayer.is_server():
-		rpc("_server_terminate", why)
-	else:
-		print("Game was closed because: ", why)
+		1+1
+		# close connection, and kick all players
 	multiplayer.multiplayer_peer.close()
 	get_tree().quit()
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		close_game("close button pressed.")
+		close_game()
 
 func add_player(id = 1):
 	if not multiplayer.is_server():
@@ -81,7 +56,6 @@ func _on_host_pressed():
 	multiplayer.peer_disconnected.connect(delete_player)
 	add_player()
 	$"Server Menu".hide()
-	current_state = GameState.FIGHTING
 
 func _on_join_pressed():
 	var result = peer.create_client($"Server Menu/Panel/Address".text, $"Server Menu/Panel/Port".text.to_int())
@@ -92,4 +66,3 @@ func _on_join_pressed():
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(delete_player)
 	$"Server Menu".hide()
-	current_state = GameState.FIGHTING

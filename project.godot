@@ -12,13 +12,15 @@ config_version=5
 
 config/name="Tactical Siege"
 config/description="Shooter Game."
-config/version="V0.1.1"
+config/version="V4.0.0"
 run/main_scene="res://world.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
 
+window/size/viewport_width=960
+window/size/viewport_height=540
 window/stretch/mode="canvas_items"
 
 [input]
