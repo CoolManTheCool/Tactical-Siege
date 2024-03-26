@@ -16,15 +16,16 @@ sky = SubResource("Sky_6uffu")
 tonemap_mode = 2
 glow_enabled = true
 
+[sub_resource type="LabelSettings" id="LabelSettings_k3to3"]
+line_spacing = 0.0
+font_color = Color(1, 1, 0, 1)
+shadow_color = Color(0, 0, 0, 1)
+
 [sub_resource type="LabelSettings" id="LabelSettings_3psr2"]
 font_size = 94
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 15
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_k3to3"]
-font_color = Color(1, 1, 0, 1)
 shadow_color = Color(0, 0, 0, 1)
 
 [node name="World" type="Node3D"]
@@ -56,7 +57,7 @@ size = Vector3(25, 0.1, 25)
 
 [node name="Main Menu" type="CanvasLayer" parent="GUI"]
 
-[node name="Panel" type="Panel" parent="GUI/Main Menu"]
+[node name="Options" type="Panel" parent="GUI/Main Menu"]
 texture_filter = 1
 offset_left = 64.0
 offset_top = 64.0
@@ -68,27 +69,114 @@ size_flags_horizontal = 0
 size_flags_vertical = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="Title" type="Label" parent="GUI/Main Menu/Panel"]
+[node name="Singleplayer" type="Button" parent="GUI/Main Menu/Options"]
 layout_mode = 0
-offset_left = 274.0
-offset_top = -64.0
-offset_right = 896.0
-offset_bottom = 68.0
-text = "Tactical Siege"
-label_settings = SubResource("LabelSettings_3psr2")
+offset_left = 51.0
+offset_top = 32.0
+offset_right = 204.0
+offset_bottom = 82.0
+text = "Singleplayer"
 
-[node name="Splash" type="Label" parent="GUI/Main Menu/Panel"]
+[node name="Mutliplayer" type="Button" parent="GUI/Main Menu/Options"]
 layout_mode = 0
-offset_left = 729.0
-offset_top = 80.0
-offset_right = 833.0
-offset_bottom = 103.0
+offset_left = 51.0
+offset_top = 114.0
+offset_right = 204.0
+offset_bottom = 164.0
+text = "Mutliplayer"
+
+[node name="Options" type="Button" parent="GUI/Main Menu/Options"]
+layout_mode = 0
+offset_left = 51.0
+offset_top = 196.0
+offset_right = 204.0
+offset_bottom = 246.0
+text = "Options"
+
+[node name="Quit" type="Button" parent="GUI/Main Menu/Options"]
+layout_mode = 0
+offset_left = 51.0
+offset_top = 278.0
+offset_right = 204.0
+offset_bottom = 328.0
+text = "Quit"
+
+[node name="Splashies" type="Control" parent="GUI/Main Menu"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Splash" type="Label" parent="GUI/Main Menu/Splashies"]
+layout_mode = 2
+offset_left = 338.0
+offset_top = 207.0
+offset_right = 487.998
+offset_bottom = 230.0
 rotation = -0.174533
-text = "Tactical Siege"
+scale = Vector2(1.79641, 1.79641)
+text = "Get Tactically Sieged
+"
 label_settings = SubResource("LabelSettings_k3to3")
 script = ExtResource("3_wou2p")
-max_scale = 1.5
-min_scale = 1.0
+max_scale = 1.9
+min_scale = 1.1
+speed = 3.0
+
+[node name="Splash2" type="Label" parent="GUI/Main Menu/Splashies"]
+layout_mode = 2
+offset_left = 670.0
+offset_top = 159.0
+offset_right = 820.0
+offset_bottom = 182.0
+rotation = -0.174533
+scale = Vector2(1.79641, 1.79641)
+text = "Get Tactically Sieged
+"
+label_settings = SubResource("LabelSettings_k3to3")
+script = ExtResource("3_wou2p")
+max_scale = 1.9
+min_scale = 1.1
+speed = 3.0
+
+[node name="Splash3" type="Label" parent="GUI/Main Menu/Splashies"]
+layout_mode = 2
+offset_left = 333.476
+offset_top = 349.0
+offset_right = 491.476
+offset_bottom = 372.0
+rotation = 0.174533
+scale = Vector2(1.79641, 1.79641)
+text = "Get Tactically Sieged
+"
+label_settings = SubResource("LabelSettings_k3to3")
+script = ExtResource("3_wou2p")
+max_scale = 1.9
+min_scale = 1.1
+speed = 3.0
+
+[node name="Splash4" type="Label" parent="GUI/Main Menu/Splashies"]
+layout_mode = 2
+offset_left = 652.0
+offset_top = 414.0
+offset_right = 810.0
+offset_bottom = 437.0
+rotation = -0.261799
+scale = Vector2(1.79641, 1.79641)
+text = "Get Tactically Sieged
+"
+label_settings = SubResource("LabelSettings_k3to3")
+script = ExtResource("3_wou2p")
+max_scale = 1.9
+min_scale = 1.1
+speed = 3.0
+
+[node name="Title" type="Label" parent="GUI/Main Menu"]
+offset_left = 338.0
+offset_right = 960.0
+offset_bottom = 132.0
+text = "Tactical Siege"
+label_settings = SubResource("LabelSettings_3psr2")
 
 [node name="Server Menu" type="CanvasLayer" parent="GUI"]
 visible = false
