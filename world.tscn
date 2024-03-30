@@ -1,20 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://b4ya0a5kjkflt"]
+[gd_scene load_steps=9 format=3 uid="uid://b4ya0a5kjkflt"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_b5pec"]
 [ext_resource type="PackedScene" uid="uid://suq0je34xoqw" path="res://Player/player.tscn" id="2_ld0eb"]
 [ext_resource type="Script" path="res://Assets/Gui/Max Players Number.gd" id="3_i1af2"]
 [ext_resource type="Script" path="res://Assets/Gui/Splash.gd" id="3_wou2p"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mh57e"]
-
-[sub_resource type="Sky" id="Sky_6uffu"]
-sky_material = SubResource("ProceduralSkyMaterial_mh57e")
-
-[sub_resource type="Environment" id="Environment_d51ii"]
-background_mode = 2
-sky = SubResource("Sky_6uffu")
-tonemap_mode = 2
-glow_enabled = true
+[ext_resource type="Script" path="res://Assets/Gui/Server Menu.gd" id="4_isyw6"]
+[ext_resource type="PackedScene" uid="uid://d22y8xn8luejk" path="res://Assets/Functional/smoke_grenade.tscn" id="6_72hgc"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_k3to3"]
 line_spacing = 0.0
@@ -33,29 +24,15 @@ script = ExtResource("1_b5pec")
 player_scene = ExtResource("2_ld0eb")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://Player/player.tscn")
+_spawnable_scenes = PackedStringArray("res://Player/player.tscn", "res://world.tscn")
 spawn_path = NodePath("..")
 
 [node name="Level" type="Node3D" parent="."]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Level"]
-transform = Transform3D(-0.866025, -0.433013, 0.250001, -0.264382, 0.820957, 0.506094, -0.424385, 0.372194, -0.825451, 0, 0, 0)
-light_energy = 0.515
-shadow_enabled = true
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Level"]
-environment = SubResource("Environment_d51ii")
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Level"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02736, 0)
-use_collision = true
-size = Vector3(25, 0.1, 25)
-
-[node name="Node3D" type="Node3D" parent="Level"]
-
 [node name="GUI" type="Node3D" parent="."]
 
 [node name="Main Menu" type="CanvasLayer" parent="GUI"]
+unique_name_in_owner = true
 
 [node name="Options" type="Panel" parent="GUI/Main Menu"]
 texture_filter = 1
@@ -63,27 +40,25 @@ offset_left = 64.0
 offset_top = 64.0
 offset_right = 320.0
 offset_bottom = 476.0
-grow_horizontal = 2
-grow_vertical = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="Singleplayer" type="Button" parent="GUI/Main Menu/Options"]
+[node name="Play" type="Button" parent="GUI/Main Menu/Options"]
 layout_mode = 0
 offset_left = 51.0
 offset_top = 32.0
 offset_right = 204.0
 offset_bottom = 82.0
-text = "Singleplayer"
+text = "Play"
 
-[node name="Mutliplayer" type="Button" parent="GUI/Main Menu/Options"]
+[node name="Skins" type="Button" parent="GUI/Main Menu/Options"]
 layout_mode = 0
 offset_left = 51.0
 offset_top = 114.0
 offset_right = 204.0
 offset_bottom = 164.0
-text = "Mutliplayer"
+text = "Skins (WIP)"
 
 [node name="Options" type="Button" parent="GUI/Main Menu/Options"]
 layout_mode = 0
@@ -114,9 +89,8 @@ offset_top = 207.0
 offset_right = 487.998
 offset_bottom = 230.0
 rotation = -0.174533
-scale = Vector2(1.79641, 1.79641)
-text = "Get Tactically Sieged
-"
+scale = Vector2(1.47127, 1.47127)
+text = "Get tactically sieged"
 label_settings = SubResource("LabelSettings_k3to3")
 script = ExtResource("3_wou2p")
 max_scale = 1.9
@@ -130,9 +104,8 @@ offset_top = 159.0
 offset_right = 820.0
 offset_bottom = 182.0
 rotation = -0.174533
-scale = Vector2(1.79641, 1.79641)
-text = "Get Tactically Sieged
-"
+scale = Vector2(1.47127, 1.47127)
+text = "Sactical Tiege"
 label_settings = SubResource("LabelSettings_k3to3")
 script = ExtResource("3_wou2p")
 max_scale = 1.9
@@ -146,9 +119,8 @@ offset_top = 349.0
 offset_right = 491.476
 offset_bottom = 372.0
 rotation = 0.174533
-scale = Vector2(1.79641, 1.79641)
-text = "Get Tactically Sieged
-"
+scale = Vector2(1.47127, 1.47127)
+text = "The Superior Empire"
 label_settings = SubResource("LabelSettings_k3to3")
 script = ExtResource("3_wou2p")
 max_scale = 1.9
@@ -162,9 +134,8 @@ offset_top = 414.0
 offset_right = 810.0
 offset_bottom = 437.0
 rotation = -0.261799
-scale = Vector2(1.79641, 1.79641)
-text = "Get Tactically Sieged
-"
+scale = Vector2(1.47127, 1.47127)
+text = "Skibidi Rizz"
 label_settings = SubResource("LabelSettings_k3to3")
 script = ExtResource("3_wou2p")
 max_scale = 1.9
@@ -179,17 +150,19 @@ text = "Tactical Siege"
 label_settings = SubResource("LabelSettings_3psr2")
 
 [node name="Server Menu" type="CanvasLayer" parent="GUI"]
+unique_name_in_owner = true
 visible = false
+script = ExtResource("4_isyw6")
 
 [node name="Panel" type="Panel" parent="GUI/Server Menu"]
 texture_filter = 1
-anchors_preset = -1
-anchor_right = 1.08958
-anchor_bottom = 1.11852
-offset_left = 384.0
-offset_top = 216.0
-offset_right = -382.0
-offset_bottom = -216.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 330.0
+offset_top = 184.0
+offset_right = -330.0
+offset_bottom = -184.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 0
@@ -200,16 +173,16 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 0
 offset_left = 12.0
 offset_top = 12.0
-offset_right = 89.333
+offset_right = 57.0
 offset_bottom = 44.0
 text = "Host
 "
 
 [node name="Join" type="Button" parent="GUI/Server Menu/Panel"]
 layout_mode = 0
-offset_left = 101.333
+offset_left = 69.0
 offset_top = 12.0
-offset_right = 178.666
+offset_right = 114.0
 offset_bottom = 44.0
 text = "Join"
 
@@ -218,7 +191,7 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_left = 12.0
 offset_top = 132.0
-offset_right = 268.0
+offset_right = 288.0
 offset_bottom = 164.0
 text = "Cool.Kittycraft0.online"
 placeholder_text = "Ip Address"
@@ -227,18 +200,36 @@ scroll_past_end_of_file = true
 [node name="Port" type="TextEdit" parent="GUI/Server Menu/Panel"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 190.666
+offset_left = 126.0
 offset_top = 13.0
-offset_right = 267.999
+offset_right = 171.0
 offset_bottom = 45.0
 text = "6325"
 scroll_past_end_of_file = true
+
+[node name="Map" type="OptionButton" parent="GUI/Server Menu/Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 184.0
+offset_top = 13.0
+offset_right = 288.0
+offset_bottom = 44.0
+item_count = 3
+selected = 0
+popup/item_0/text = "Mist"
+popup/item_0/id = 0
+popup/item_1/text = "Map 2"
+popup/item_1/id = 1
+popup/item_1/disabled = true
+popup/item_2/text = "Map 3"
+popup/item_2/id = 2
+popup/item_2/disabled = true
 
 [node name="Max Players" type="Panel" parent="GUI/Server Menu/Panel"]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 56.0
-offset_right = 268.0
+offset_right = 288.0
 offset_bottom = 120.0
 
 [node name="Max Players Descriptor" type="Label" parent="GUI/Server Menu/Panel/Max Players"]
@@ -254,7 +245,7 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4.0
 offset_top = 12.0
-offset_right = 252.0
+offset_right = 272.0
 offset_bottom = 44.0
 min_value = 1.0
 max_value = 9.0
@@ -272,5 +263,133 @@ offset_bottom = 63.0
 text = "10"
 script = ExtResource("3_i1af2")
 
+[node name="Pause Menu" type="CanvasLayer" parent="GUI"]
+unique_name_in_owner = true
+visible = false
+
+[node name="Pause" type="Panel" parent="GUI/Pause Menu"]
+offset_left = 300.0
+offset_top = 147.0
+offset_right = 684.0
+offset_bottom = 363.0
+
+[node name="Button3" type="Button" parent="GUI/Pause Menu/Pause"]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 112.0
+offset_right = 170.0
+offset_bottom = 144.0
+text = "Call Vote"
+
+[node name="Button4" type="Button" parent="GUI/Pause Menu/Pause"]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 64.0
+offset_right = 170.0
+offset_bottom = 96.0
+text = "Audio"
+
+[node name="Button" type="Button" parent="GUI/Pause Menu/Pause"]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 16.0
+offset_right = 170.0
+offset_bottom = 48.0
+text = "Settings"
+
+[node name="Button2" type="Button" parent="GUI/Pause Menu/Pause"]
+layout_mode = 0
+offset_left = 212.0
+offset_top = 64.0
+offset_right = 340.0
+offset_bottom = 96.0
+text = "Change Team"
+
+[node name="Button5" type="Button" parent="GUI/Pause Menu/Pause"]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 160.0
+offset_right = 170.0
+offset_bottom = 192.0
+text = "Main Menu
+"
+
+[node name="Button6" type="Button" parent="GUI/Pause Menu/Pause"]
+layout_mode = 0
+offset_left = 212.0
+offset_top = 112.0
+offset_right = 340.0
+offset_bottom = 144.0
+text = "Skins"
+
+[node name="Button7" type="Button" parent="GUI/Pause Menu/Pause"]
+layout_mode = 0
+offset_left = 212.0
+offset_top = 16.0
+offset_right = 340.0
+offset_bottom = 48.0
+text = "Admin"
+
+[node name="Button8" type="Button" parent="GUI/Pause Menu/Pause"]
+layout_mode = 0
+offset_left = 212.0
+offset_top = 160.0
+offset_right = 340.0
+offset_bottom = 192.0
+text = "Resume Game"
+
+[node name="Settings" type="Panel" parent="GUI/Pause Menu"]
+visible = false
+offset_left = 300.0
+offset_top = 147.0
+offset_right = 684.0
+offset_bottom = 363.0
+
+[node name="Admin" type="Panel" parent="GUI/Pause Menu"]
+visible = false
+offset_left = 300.0
+offset_top = 147.0
+offset_right = 684.0
+offset_bottom = 363.0
+
+[node name="Audio" type="Panel" parent="GUI/Pause Menu"]
+visible = false
+offset_left = 300.0
+offset_top = 147.0
+offset_right = 684.0
+offset_bottom = 363.0
+
+[node name="Team" type="Panel" parent="GUI/Pause Menu"]
+visible = false
+offset_left = 300.0
+offset_top = 147.0
+offset_right = 684.0
+offset_bottom = 363.0
+
+[node name="Vote" type="Panel" parent="GUI/Pause Menu"]
+visible = false
+offset_left = 300.0
+offset_top = 147.0
+offset_right = 684.0
+offset_bottom = 363.0
+
+[node name="Skins" type="Panel" parent="GUI/Pause Menu"]
+visible = false
+offset_left = 300.0
+offset_top = 147.0
+offset_right = 684.0
+offset_bottom = 363.0
+
+[node name="Skins2" type="Panel" parent="GUI/Pause Menu"]
+visible = false
+offset_left = 300.0
+offset_top = 147.0
+offset_right = 684.0
+offset_bottom = 363.0
+
+[node name="Smoke Grenade" parent="." instance=ExtResource("6_72hgc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0234594, 15.0298, 9.30998)
+
+[connection signal="pressed" from="GUI/Main Menu/Options/Play" to="GUI/Server Menu" method="_on_play_pressed"]
 [connection signal="pressed" from="GUI/Server Menu/Panel/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="GUI/Server Menu/Panel/Join" to="." method="_on_join_pressed"]

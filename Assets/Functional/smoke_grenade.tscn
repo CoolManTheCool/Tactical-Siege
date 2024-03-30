@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://d22y8xn8luejk"]
+
+[ext_resource type="Script" path="res://Assets/Functional/smoke_grenade.gd" id="1_exj53"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_chjdh"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_b615p"]
+radius = 0.1
+
+[sub_resource type="FogMaterial" id="FogMaterial_eo06h"]
+density = 3.0
+edge_fade = 1.62451e-05
+
+[node name="Smoke Grenade" type="RigidBody3D"]
+script = ExtResource("1_exj53")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_chjdh")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_b615p")
+
+[node name="Smoke" type="FogVolume" parent="."]
+size = Vector3(10, 10, 10)
+shape = 0
+material = SubResource("FogMaterial_eo06h")

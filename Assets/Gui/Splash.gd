@@ -29,8 +29,6 @@ func _process(delta):
 	scale.x = sv
 	scale.y = sv
 	
-	label_settings.font_size
-	
 	if update:
 		redo_text()
 		update = false

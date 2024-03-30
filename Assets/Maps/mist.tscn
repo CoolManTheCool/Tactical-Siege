@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8ii4svhsjdon"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gfepk"]
+
+[sub_resource type="Sky" id="Sky_dfp6a"]
+sky_material = SubResource("ProceduralSkyMaterial_gfepk")
+
+[sub_resource type="Environment" id="Environment_cugla"]
+background_mode = 2
+sky = SubResource("Sky_dfp6a")
+tonemap_mode = 2
+glow_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+
+[node name="Mist" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.250001, -0.264382, 0.820957, 0.506094, -0.424385, 0.372194, -0.825451, 0, 0, 0)
+light_energy = 0.515
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cugla")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02736, 0)
+use_collision = true
+size = Vector3(25, 0.1, 25)

@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+enum lethals { IMPACT, M69, SMOKE, }
+
 # Player Variables
 @export_category("Player")
 @export_range(0, 100) var health: float = 100 ## Player's current health
@@ -15,6 +17,10 @@ extends CharacterBody3D
 @export var jump_velocity: float = 4.5 ## Velocity += this when jumping
 @export_range(0.1, 100.0) var sensitivity_x = 50 ## horizontal sensitivity
 @export_range(0.1, 100.0) var sensitivity_y = 50 ## vertical sensitivity
+@export_group("Weapons")
+@export_range(0, 2) var lethal_cd: float = 0.2 ## Cooldown for using lethals, in seconds
+@export var selected_lethal: lethals = lethals.SMOKE
+var lethal_cd_elapsed
 var sneaking: bool = false
 var mouse_delta := Vector2.ZERO
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") # gravity
@@ -25,21 +31,22 @@ var just_exited: bool = false
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
-	$"../".server_closed.connect(_self_delete)
 	is_me = is_multiplayer_authority()
 	$Head/Camera3D.current = is_me
 	$"Body-3".visible = !is_me
 
 func _self_delete():
 	queue_free()
-	
-func _ready():
-	pass
 
 func _physics_process(delta):
 	if(is_me):
 		mouseMovement()
 		movement(delta)
+		weapon()
+
+func weapon():
+	if Input.is_action_just_pressed("lethal") && true:
+		pass
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion:
