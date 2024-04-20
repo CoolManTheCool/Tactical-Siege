@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://c8ii4svhsjdon"]
+[gd_scene load_steps=6 format=3 uid="uid://c8ii4svhsjdon"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gfepk"]
 
@@ -11,7 +11,12 @@ sky = SubResource("Sky_dfp6a")
 tonemap_mode = 2
 glow_enabled = true
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_nagoc"]
+size = Vector3(3, 1.5, 0.05)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_4kdp6"]
+viewport_path = NodePath("Billboard/Sprite3D/SubViewport")
 
 [node name="Mist" type="Node3D"]
 
@@ -27,3 +32,73 @@ environment = SubResource("Environment_cugla")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02736, 0)
 use_collision = true
 size = Vector3(25, 0.1, 25)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 10, 10, 10)
+light_energy = 20.0
+light_volumetric_fog_energy = 10.0
+shadow_enabled = true
+spot_range = 75.0
+spot_angle = 20.0
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="."]
+transform = Transform3D(-0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, 0.5, -0.5, 10, 10, -10)
+light_energy = 20.0
+light_volumetric_fog_energy = 10.0
+light_size = 0.232
+shadow_enabled = true
+spot_range = 75.0
+spot_angle = 20.0
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="."]
+transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, -10, 10, 10)
+light_energy = 20.0
+light_volumetric_fog_energy = 10.0
+light_size = 0.232
+shadow_enabled = true
+spot_range = 75.0
+spot_angle = 20.0
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="."]
+transform = Transform3D(-0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, 0.5, -0.5, -10, 10, -10)
+light_energy = 20.0
+light_volumetric_fog_energy = 10.0
+light_size = 0.232
+shadow_enabled = true
+spot_range = 75.0
+spot_angle = 20.0
+
+[node name="Billboard" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.75, -12)
+mesh = SubResource("BoxMesh_nagoc")
+
+[node name="SpotLight3D5" type="SpotLight3D" parent="Billboard"]
+transform = Transform3D(0.965926, -7.19671e-09, -0.258819, -0.0669873, 0.965926, -0.25, 0.25, 0.258819, 0.933013, -1.2, -0.7, 1)
+
+[node name="SpotLight3D6" type="SpotLight3D" parent="Billboard"]
+transform = Transform3D(0.965926, 6.94284e-09, 0.258819, 0.0669873, 0.965926, -0.25, -0.25, 0.258819, 0.933013, 1.2, -0.7, 1)
+
+[node name="Sprite3D" type="Sprite3D" parent="Billboard"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0.0253525)
+texture = SubResource("ViewportTexture_4kdp6")
+
+[node name="SubViewport" type="SubViewport" parent="Billboard/Sprite3D"]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(3000, 1500)
+
+[node name="Paper 1" type="Panel" parent="Billboard/Sprite3D/SubViewport"]
+offset_left = 500.0
+offset_top = 500.0
+offset_right = 1000.0
+offset_bottom = 1210.0
+rotation = 0.0872665
+pivot_offset = Vector2(231, 163)
+
+[node name="Paper 2" type="Panel" parent="Billboard/Sprite3D/SubViewport"]
+offset_left = 500.0
+offset_top = 500.0
+offset_right = 1000.0
+offset_bottom = 827.0
+rotation = 0.0872665
+pivot_offset = Vector2(231, 163)

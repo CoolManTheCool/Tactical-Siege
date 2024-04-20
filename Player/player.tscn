@@ -1,6 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://suq0je34xoqw"]
+[gd_scene load_steps=16 format=3 uid="uid://suq0je34xoqw"]
 
 [ext_resource type="Script" path="res://Player/Player.gd" id="1_ay81r"]
+[ext_resource type="Script" path="res://Player/Hand.gd" id="2_hfe6j"]
+[ext_resource type="PackedScene" uid="uid://dfao8mokqn24b" path="res://Assets/Weapons/Assault Rifle/Assault_Rifle.tscn" id="4_13w0f"]
 [ext_resource type="Script" path="res://Player/FPS_Counter.gd" id="4_hseru"]
 [ext_resource type="Texture2D" uid="uid://d1tbxtefi1flx" path="res://Player/Crosshair.png" id="4_ubp5t"]
 
@@ -47,6 +49,11 @@ shadow_mesh = SubResource("ArrayMesh_ehjr0")
 [sub_resource type="BoxShape3D" id="BoxShape3D_jwv4p"]
 size = Vector3(0.721252, 2, 0.313605)
 
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_rf3d0"]
+exposure_multiplier = 0.8
+auto_exposure_enabled = true
+auto_exposure_min_sensitivity = 1600.0
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_75a4a"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
@@ -66,7 +73,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Body-3:scale")
+tracks/0/path = NodePath("Mesh:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -78,7 +85,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
+tracks/1/path = NodePath("Collider:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -90,7 +97,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CollisionShape3D:shape:size")
+tracks/2/path = NodePath("Collider:shape:size")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -118,7 +125,7 @@ length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Body-3:scale")
+tracks/0/path = NodePath("Mesh:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -130,7 +137,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
+tracks/1/path = NodePath("Collider:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -142,7 +149,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CollisionShape3D:shape:size")
+tracks/2/path = NodePath("Collider:shape:size")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -183,15 +190,14 @@ floor_stop_on_slope = false
 script = ExtResource("1_ay81r")
 headPath = NodePath("Head")
 AnimPath = NodePath("Animation")
-selected_lethal = 1
 
-[node name="Body-3" type="MeshInstance3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.285041, 0, -4.304e-08, 0, 0.285041, 0, 4.304e-08, 0, -0.285041, 0, -1, 0)
 visible = false
 mesh = SubResource("ArrayMesh_fsrna")
 skeleton = NodePath("")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00552368, 0, 0.0133758)
 shape = SubResource("BoxShape3D_jwv4p")
 
@@ -199,6 +205,7 @@ shape = SubResource("BoxShape3D_jwv4p")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
+attributes = SubResource("CameraAttributesPractical_rf3d0")
 current = true
 fov = 60.0
 
@@ -207,7 +214,11 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 target_position = Vector3(0, -30, 0)
 
 [node name="Hand" type="Marker3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.673998, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.5, -0.725)
+script = ExtResource("2_hfe6j")
+
+[node name="Assault Rifle" parent="Head/Hand" instance=ExtResource("4_13w0f")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 
 [node name="Hud" type="Control" parent="."]
 layout_mode = 3
@@ -241,6 +252,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35994, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00615931, -0.761188, 0.0128326)
 shape = SubResource("BoxShape3D_2iguh")
+
+[node name="Position" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

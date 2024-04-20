@@ -11,4 +11,4 @@ func _ready():
 func _process(_delta):
 	slider_value = slider.value
 	text = str(slider_value)
-	position.x = init_pos + notch_offset * (slider_value-1)
+	position.x = init_pos + notch_offset * (slider_value-2)/4.8

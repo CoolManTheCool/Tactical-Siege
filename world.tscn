@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://b4ya0a5kjkflt"]
+[gd_scene load_steps=8 format=3 uid="uid://b4ya0a5kjkflt"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_b5pec"]
 [ext_resource type="PackedScene" uid="uid://suq0je34xoqw" path="res://Player/player.tscn" id="2_ld0eb"]
 [ext_resource type="Script" path="res://Assets/Gui/Max Players Number.gd" id="3_i1af2"]
 [ext_resource type="Script" path="res://Assets/Gui/Splash.gd" id="3_wou2p"]
 [ext_resource type="Script" path="res://Assets/Gui/Server Menu.gd" id="4_isyw6"]
-[ext_resource type="PackedScene" uid="uid://d22y8xn8luejk" path="res://Assets/Functional/smoke_grenade.tscn" id="6_72hgc"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_k3to3"]
 line_spacing = 0.0
@@ -33,6 +32,7 @@ spawn_path = NodePath("..")
 
 [node name="Main Menu" type="CanvasLayer" parent="GUI"]
 unique_name_in_owner = true
+visible = false
 
 [node name="Options" type="Panel" parent="GUI/Main Menu"]
 texture_filter = 1
@@ -89,8 +89,8 @@ offset_top = 207.0
 offset_right = 487.998
 offset_bottom = 230.0
 rotation = -0.174533
-scale = Vector2(1.47127, 1.47127)
-text = "Get tactically sieged"
+scale = Vector2(1.27643, 1.27643)
+text = "The Empire"
 label_settings = SubResource("LabelSettings_k3to3")
 script = ExtResource("3_wou2p")
 max_scale = 1.9
@@ -104,8 +104,8 @@ offset_top = 159.0
 offset_right = 820.0
 offset_bottom = 182.0
 rotation = -0.174533
-scale = Vector2(1.47127, 1.47127)
-text = "Sactical Tiege"
+scale = Vector2(1.27643, 1.27643)
+text = "// credits.txt?? cool"
 label_settings = SubResource("LabelSettings_k3to3")
 script = ExtResource("3_wou2p")
 max_scale = 1.9
@@ -119,8 +119,8 @@ offset_top = 349.0
 offset_right = 491.476
 offset_bottom = 372.0
 rotation = 0.174533
-scale = Vector2(1.47127, 1.47127)
-text = "The Superior Empire"
+scale = Vector2(1.27643, 1.27643)
+text = "Halo"
 label_settings = SubResource("LabelSettings_k3to3")
 script = ExtResource("3_wou2p")
 max_scale = 1.9
@@ -134,8 +134,8 @@ offset_top = 414.0
 offset_right = 810.0
 offset_bottom = 437.0
 rotation = -0.261799
-scale = Vector2(1.47127, 1.47127)
-text = "Skibidi Rizz"
+scale = Vector2(1.27643, 1.27643)
+text = "seige????"
 label_settings = SubResource("LabelSettings_k3to3")
 script = ExtResource("3_wou2p")
 max_scale = 1.9
@@ -151,7 +151,6 @@ label_settings = SubResource("LabelSettings_3psr2")
 
 [node name="Server Menu" type="CanvasLayer" parent="GUI"]
 unique_name_in_owner = true
-visible = false
 script = ExtResource("4_isyw6")
 
 [node name="Panel" type="Panel" parent="GUI/Server Menu"]
@@ -247,9 +246,9 @@ offset_left = 4.0
 offset_top = 12.0
 offset_right = 272.0
 offset_bottom = 44.0
-min_value = 1.0
-max_value = 9.0
-value = 1.0
+min_value = 2.0
+max_value = 40.0
+value = 2.0
 rounded = true
 tick_count = 9
 ticks_on_borders = true
@@ -264,7 +263,6 @@ text = "10"
 script = ExtResource("3_i1af2")
 
 [node name="Pause Menu" type="CanvasLayer" parent="GUI"]
-unique_name_in_owner = true
 visible = false
 
 [node name="Pause" type="Panel" parent="GUI/Pause Menu"]
@@ -386,9 +384,6 @@ offset_left = 300.0
 offset_top = 147.0
 offset_right = 684.0
 offset_bottom = 363.0
-
-[node name="Smoke Grenade" parent="." instance=ExtResource("6_72hgc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0234594, 15.0298, 9.30998)
 
 [connection signal="pressed" from="GUI/Main Menu/Options/Play" to="GUI/Server Menu" method="_on_play_pressed"]
 [connection signal="pressed" from="GUI/Server Menu/Panel/Host" to="." method="_on_host_pressed"]

@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 enum lethals { IMPACT, M69, SMOKE, }
-
+var lethal_speeds: PackedFloat32Array = [ 15, 20, 20]
 # Player Variables
 @export_category("Player")
 @export_range(0, 100) var health: float = 100 ## Player's current health
@@ -18,9 +18,9 @@ enum lethals { IMPACT, M69, SMOKE, }
 @export_range(0.1, 100.0) var sensitivity_x = 50 ## horizontal sensitivity
 @export_range(0.1, 100.0) var sensitivity_y = 50 ## vertical sensitivity
 @export_group("Weapons")
-@export_range(0, 2) var lethal_cd: float = 0.2 ## Cooldown for using lethals, in seconds
+@export_range(0, 2) var lethal_cd: float = 1 ## Cooldown for using lethals, in seconds
 @export var selected_lethal: lethals = lethals.SMOKE
-var lethal_cd_elapsed
+var lethal_cd_elapsed: float = 0
 var sneaking: bool = false
 var mouse_delta := Vector2.ZERO
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") # gravity
@@ -28,25 +28,48 @@ var last_mouse_pos = Vector2()
 var is_me: bool = false ## is_mulitplayer_authority()
 var body_count: int = 0 # This is NOT what is sounds like, its count of objects above the player.
 var just_exited: bool = false
+var held_lethal: RigidBody3D
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
 	is_me = is_multiplayer_authority()
 	$Head/Camera3D.current = is_me
-	$"Body-3".visible = !is_me
+	$"Mesh".visible = !is_me
 
 func _self_delete():
 	queue_free()
 
 func _physics_process(delta):
-	if(is_me):
+	if is_me and not $"../GUI/Pause Menu".visible:
 		mouseMovement()
 		movement(delta)
-		weapon()
+		leathals(delta)
 
-func weapon():
-	if Input.is_action_just_pressed("lethal") && true:
-		pass
+func leathals(delta):
+	# lethals (grenades)
+	if lethal_cd_elapsed < lethal_cd:
+		lethal_cd_elapsed += delta
+	elif Input.is_action_just_pressed("lethal"):
+		held_lethal = load("res://Assets/Weapons/Lethals/smoke_grenade.tscn").instantiate()
+		add_child(held_lethal, true)
+		held_lethal.thrown = false
+	elif Input.is_action_just_released("lethal"):
+		if held_lethal and is_instance_valid(held_lethal):
+			held_lethal.queue_free()
+		rpc("spawn_lethal", selected_lethal, self)
+		lethal_cd_elapsed = 0
+
+@rpc("reliable", "call_local")
+func spawn_lethal(lethal: lethals, thrower):
+	if lethal == lethals.SMOKE:
+		var spawned_lethal = load("res://Assets/Weapons/Lethals/smoke_grenade.tscn").instantiate()
+		$"../".add_child(spawned_lethal, true)
+		spawned_lethal.position = thrower.position + Vector3(0, 0.8, 0)
+		spawned_lethal.thrown = true
+		print("Smoke!")
+		var direction = -thrower.find_child("Head").global_transform.basis.z.normalized()
+		spawned_lethal.starting_vel = direction.normalized() * lethal_speeds[lethal]
+		spawned_lethal.update_vel = true
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion:

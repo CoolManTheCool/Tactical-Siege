@@ -4,17 +4,21 @@ enum { MIST }
 var peer = ENetMultiplayerPeer.new()
 @export var player_scene : PackedScene = load("res://Player/player.tscn")
 var connected: bool = false
-
+var map
 
 func _ready():
-	pass
+	%"Server Menu".visible = false
+	$"GUI/Pause Menu".visible = false
+	%"Main Menu".visible = true
 
 func _peer_kicked(id: int):
 	if id == 1:
 		print("Host was kicked from the lobby, ignoring")
-		
 
 func _process(_delta):
+	if Input.is_action_pressed("quit") or Input.is_action_pressed("host_terminate"):
+		close_game()
+		
 	if Input.is_action_just_pressed("fullscreen"):
 		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
@@ -27,9 +31,12 @@ func _process(_delta):
 		elif %"Server Menu".visible:
 			%"Main Menu".visible = true
 			%"Server Menu".visible = false
-		elif %"Pause Menu".visible:
+		elif $"GUI/Pause Menu".visible:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			%"Pause Menu".visible = false
+			$"GUI/Pause Menu".visible = false
+		else:
+			$"GUI/Pause Menu".visible = true
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func close_game():
 	if connected:
@@ -45,20 +52,22 @@ func _notification(what):
 
 func host_left():
 	%"Main Menu".visible = true
+	get_tree().reload_current_scene()
 
 func unload_map():
 	for children in $"Level".get_children():
 		children.queue_free()
-	
-func load_map(map):
-	if map == MIST:
+
+@rpc("authority", "reliable", "call_local")
+func load_map(_map):
+	if _map == MIST:
 		print("I got misty")
 		$"Level".add_child(load("res://Assets/Maps/mist.tscn").instantiate())
-		print_tree_pretty()
 
 func add_player(id = 1):
 	if not multiplayer.is_server():
 		return
+	rpc_id(id, "load_map", map)
 	if has_node(str(id)):
 		print("A player with ID", id, "already exists.")
 		return
@@ -66,6 +75,7 @@ func add_player(id = 1):
 	player.name = str(id)  # Use the unique network ID
 	add_child(player)
 	print("Added player with ID", id)
+	
 
 func delete_player(id):
 	var player_node = get_node(str(id))
@@ -75,22 +85,41 @@ func delete_player(id):
 	else:
 		print("Error: Attempted to delete non-existent player with ID", id)
 
-func _on_host_pressed(attemp: int = 0):
-	
-	if attemp >= 5:
-		pass
-	
+func _on_host_pressed(attemp: int = 1):
 	var error = peer.create_server(%Port.text.to_int(), %"Max Players".value)
+	
 	if error == ERR_ALREADY_IN_USE:
+		if attemp >= 5:
+			print("Five attempts have passed, terminating")
+			close_game()
+			return
 		print("Cannot create server, peer already in use, trying again")
+		peer.close()
 		_on_host_pressed(attemp+1)
 		return
-	load_map(MIST)
-	peer_setup()
+	if error == ERR_CANT_CREATE:
+		if attemp >= 5:
+			print("Five attempts have passed, terminating")
+			close_game()
+			return
+		print("Cannot create server")
+		_on_host_pressed(attemp+1)
+		return
+	if error == OK:
+		map = %"Map".selected
+		peer_setup()
 
-func _on_join_pressed():
+func _on_join_pressed(attemp: int = 1):
 	var error = peer.create_client(%Address.text, %Port.text.to_int())
-	peer_setup()
+	if error == ERR_CANT_CREATE:
+		if attemp >= 5:
+			print("Five attempts have passed, terminating")
+			close_game()
+			return
+		print("Cannot create client")
+		_on_join_pressed()
+	if error == OK:
+		peer_setup()
 
 func peer_setup():
 	multiplayer.multiplayer_peer = peer
@@ -98,4 +127,8 @@ func peer_setup():
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(delete_player)
 	multiplayer.server_disconnected.connect(host_left)
+	add_player()
+	# L O C K   I N
+	# rpc_id(1, "host_questions", id, question)
 	%"Server Menu".hide()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
