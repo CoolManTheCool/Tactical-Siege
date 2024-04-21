@@ -18,9 +18,10 @@ properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
-[node name="Smoke Grenade" type="RigidBody3D"]
+[node name="Smoke Grenade" type="CharacterBody3D"]
 collision_layer = 4
 collision_mask = 5
+input_ray_pickable = false
 script = ExtResource("1_piuqx")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

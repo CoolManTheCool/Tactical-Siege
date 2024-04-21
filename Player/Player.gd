@@ -1,7 +1,4 @@
 extends CharacterBody3D
-
-enum lethals { IMPACT, M69, SMOKE, }
-var lethal_speeds: PackedFloat32Array = [ 15, 20, 20]
 # Player Variables
 @export_category("Player")
 @export_range(0, 100) var health: float = 100 ## Player's current health
@@ -15,20 +12,16 @@ var lethal_speeds: PackedFloat32Array = [ 15, 20, 20]
 @export var sprint_offset: float = 2 ## movement speed when running
 @export var speed: float = 1  # this is a placeholder and is set to sprint sneak or walk speed
 @export var jump_velocity: float = 4.5 ## Velocity += this when jumping
-@export_range(0.1, 100.0) var sensitivity_x = 50 ## horizontal sensitivity
-@export_range(0.1, 100.0) var sensitivity_y = 50 ## vertical sensitivity
-@export_group("Weapons")
-@export_range(0, 2) var lethal_cd: float = 1 ## Cooldown for using lethals, in seconds
-@export var selected_lethal: lethals = lethals.SMOKE
-var lethal_cd_elapsed: float = 0
+@export_range(0.1, 100.0) var sensitivity_x: float = 40 ## horizontal sensitivity
+@export_range(0.1, 100.0) var sensitivity_y: float = 40 ## vertical sensitivity
+
 var sneaking: bool = false
 var mouse_delta := Vector2.ZERO
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") # gravity
 var last_mouse_pos = Vector2()
 var is_me: bool = false ## is_mulitplayer_authority()
-var body_count: int = 0 # This is NOT what is sounds like, its count of objects above the player.
+var body_count: int = 0 # :skull: its count of objects above the player.
 var just_exited: bool = false
-var held_lethal: RigidBody3D
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
@@ -43,43 +36,23 @@ func _physics_process(delta):
 	if is_me and not $"../GUI/Pause Menu".visible:
 		mouseMovement()
 		movement(delta)
-		leathals(delta)
-
-func leathals(delta):
-	# lethals (grenades)
-	if lethal_cd_elapsed < lethal_cd:
-		lethal_cd_elapsed += delta
-	elif Input.is_action_just_pressed("lethal"):
-		held_lethal = load("res://Assets/Weapons/Lethals/smoke_grenade.tscn").instantiate()
-		add_child(held_lethal, true)
-		held_lethal.thrown = false
-	elif Input.is_action_just_released("lethal"):
-		if held_lethal and is_instance_valid(held_lethal):
-			held_lethal.queue_free()
-		rpc("spawn_lethal", selected_lethal, self)
-		lethal_cd_elapsed = 0
-
-@rpc("reliable", "call_local")
-func spawn_lethal(lethal: lethals, thrower):
-	if lethal == lethals.SMOKE:
-		var spawned_lethal = load("res://Assets/Weapons/Lethals/smoke_grenade.tscn").instantiate()
-		$"../".add_child(spawned_lethal, true)
-		spawned_lethal.position = thrower.position + Vector3(0, 0.8, 0)
-		spawned_lethal.thrown = true
-		print("Smoke!")
-		var direction = -thrower.find_child("Head").global_transform.basis.z.normalized()
-		spawned_lethal.starting_vel = direction.normalized() * lethal_speeds[lethal]
-		spawned_lethal.update_vel = true
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion:
 		mouse_delta += event.relative
 		
 func mouseMovement():
+	# Mouse Inputs
 	var rotateDelta = Vector2(0, 0)
-	rotateDelta.y += -mouse_delta.x * sensitivity_x / 20000
-	rotateDelta.x += -mouse_delta.y * sensitivity_y / 20000
-	# Apply rotation to the head
+	rotateDelta.y += -mouse_delta.x
+	rotateDelta.x += -mouse_delta.y
+	# Controller Inputs
+	rotateDelta += 20 * Input.get_vector("look_right","look_left","look_down","look_up")
+	#sensitivities
+	rotateDelta.x *=  sensitivity_x / 20000
+	rotateDelta.y *= sensitivity_y / 20000
+
+	# Apply rotation to the head - chat gpt, I have NO clue how this works
 	head.rotate_x(rotateDelta.x)
 	head.rotation.x = clamp(head.rotation.x, -PI / 2, PI / 2)
 	

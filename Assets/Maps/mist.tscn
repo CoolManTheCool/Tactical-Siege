@@ -1,22 +1,35 @@
-[gd_scene load_steps=6 format=3 uid="uid://c8ii4svhsjdon"]
+[gd_scene load_steps=9 format=3 uid="uid://c8ii4svhsjdon"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gfepk"]
 
-[sub_resource type="Sky" id="Sky_dfp6a"]
+[sub_resource type="Sky" id="Sky_o4vc8"]
 sky_material = SubResource("ProceduralSkyMaterial_gfepk")
 
 [sub_resource type="Environment" id="Environment_cugla"]
 background_mode = 2
-sky = SubResource("Sky_dfp6a")
+sky = SubResource("Sky_o4vc8")
 tonemap_mode = 2
 glow_enabled = true
 volumetric_fog_enabled = true
 
-[sub_resource type="BoxMesh" id="BoxMesh_nagoc"]
-size = Vector3(3, 1.5, 0.05)
+[sub_resource type="CylinderMesh" id="CylinderMesh_krnq4"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hq2kl"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.2
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_4kdp6"]
 viewport_path = NodePath("Billboard/Sprite3D/SubViewport")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8ta2l"]
+size = Vector3(3, 1.5, 0.075)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ht7qw"]
+size = Vector3(3, 1.5, 0.05)
 
 [node name="Mist" type="Node3D"]
 
@@ -29,9 +42,11 @@ shadow_enabled = true
 environment = SubResource("Environment_cugla")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02736, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.47736, 0)
 use_collision = true
-size = Vector3(25, 0.1, 25)
+collision_layer = 5
+collision_mask = 5
+size = Vector3(25, 5, 25)
 
 [node name="SpotLight3D" type="SpotLight3D" parent="."]
 transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 10, 10, 10)
@@ -68,26 +83,35 @@ shadow_enabled = true
 spot_range = 75.0
 spot_angle = 20.0
 
-[node name="Billboard" type="MeshInstance3D" parent="."]
+[node name="Billboard" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.75, -12)
-mesh = SubResource("BoxMesh_nagoc")
 
-[node name="SpotLight3D5" type="SpotLight3D" parent="Billboard"]
+[node name="Left Lamp" type="SpotLight3D" parent="Billboard"]
 transform = Transform3D(0.965926, -7.19671e-09, -0.258819, -0.0669873, 0.965926, -0.25, 0.25, 0.258819, 0.933013, -1.2, -0.7, 1)
 
-[node name="SpotLight3D6" type="SpotLight3D" parent="Billboard"]
+[node name="Mesh" type="MeshInstance3D" parent="Billboard/Left Lamp"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_krnq4")
+skeleton = NodePath("../..")
+
+[node name="Right Lamp" type="SpotLight3D" parent="Billboard"]
 transform = Transform3D(0.965926, 6.94284e-09, 0.258819, 0.0669873, 0.965926, -0.25, -0.25, 0.258819, 0.933013, 1.2, -0.7, 1)
 
-[node name="Sprite3D" type="Sprite3D" parent="Billboard"]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0.0253525)
+[node name="Mesh" type="MeshInstance3D" parent="Billboard/Right Lamp"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_hq2kl")
+skeleton = NodePath("../../Billboard Mesh")
+
+[node name="Display" type="Sprite3D" parent="Billboard"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0.035)
 texture = SubResource("ViewportTexture_4kdp6")
 
-[node name="SubViewport" type="SubViewport" parent="Billboard/Sprite3D"]
+[node name="SubViewport" type="SubViewport" parent="Billboard/Display"]
 disable_3d = true
 transparent_bg = true
 size = Vector2i(3000, 1500)
 
-[node name="Paper 1" type="Panel" parent="Billboard/Sprite3D/SubViewport"]
+[node name="Paper 1" type="Panel" parent="Billboard/Display/SubViewport"]
 offset_left = 500.0
 offset_top = 500.0
 offset_right = 1000.0
@@ -95,10 +119,17 @@ offset_bottom = 1210.0
 rotation = 0.0872665
 pivot_offset = Vector2(231, 163)
 
-[node name="Paper 2" type="Panel" parent="Billboard/Sprite3D/SubViewport"]
+[node name="Paper 2" type="Panel" parent="Billboard/Display/SubViewport"]
 offset_left = 500.0
 offset_top = 500.0
 offset_right = 1000.0
 offset_bottom = 827.0
 rotation = 0.0872665
 pivot_offset = Vector2(231, 163)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Billboard"]
+shape = SubResource("BoxShape3D_8ta2l")
+
+[node name="Billboard Mesh" type="MeshInstance3D" parent="Billboard"]
+mesh = SubResource("BoxMesh_ht7qw")
+skeleton = NodePath("../..")

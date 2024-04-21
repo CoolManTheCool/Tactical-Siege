@@ -7,5 +7,5 @@
 script = ExtResource("1_wqseq")
 
 [node name="AssaultRifle" type="MeshInstance3D" parent="."]
-transform = Transform3D(40, 0, 0, 0, -1.74846e-06, 40, 0, -40, -1.74846e-06, 0, 0, 0)
+transform = Transform3D(-1.74846e-06, -40, -1.74846e-06, 0, -1.74846e-06, 40, -40, 1.74846e-06, 7.64274e-14, 0, 0, 0)
 mesh = ExtResource("1_j5slo")

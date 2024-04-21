@@ -5,6 +5,10 @@ var peer = ENetMultiplayerPeer.new()
 @export var player_scene : PackedScene = load("res://Player/player.tscn")
 var connected: bool = false
 var map
+var maps: Array[PackedScene] = [
+	load("res://Assets/Maps/mist.tscn")
+]
+
 
 func _ready():
 	%"Server Menu".visible = false
@@ -16,7 +20,10 @@ func _peer_kicked(id: int):
 		print("Host was kicked from the lobby, ignoring")
 
 func _process(_delta):
-	if Input.is_action_pressed("quit") or Input.is_action_pressed("host_terminate"):
+
+	
+
+	if Input.is_action_pressed("quit"):
 		close_game()
 		
 	if Input.is_action_just_pressed("fullscreen"):
@@ -60,9 +67,7 @@ func unload_map():
 
 @rpc("authority", "reliable", "call_local")
 func load_map(_map):
-	if _map == MIST:
-		print("I got misty")
-		$"Level".add_child(load("res://Assets/Maps/mist.tscn").instantiate())
+	$"Level".add_child(maps[_map].instantiate())
 
 func add_player(id = 1):
 	if not multiplayer.is_server():
