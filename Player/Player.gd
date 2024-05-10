@@ -5,8 +5,8 @@ extends CharacterBody3D
 @export_group("Movement")
 @export_node_path("Node3D") var headPath : NodePath ## Path to head
 @onready var head: Node3D = get_node(headPath)
-@export_node_path("AnimationPlayer") var AnimPath : NodePath ## Path to animation player
-@onready var Anim: AnimationPlayer = get_node(AnimPath)
+@export_node_path("Node3D") var model_controller_path
+@onready var model_controller: Node3D = get_node(model_controller_path)
 @export var walk_speed: float = 4 ## movement speed
 @export var sneak_offset: float = 2 ## movement speed when sneaking
 @export var sprint_offset: float = 2 ## movement speed when running
@@ -27,7 +27,7 @@ func _enter_tree():
 	set_multiplayer_authority(name.to_int())
 	is_me = is_multiplayer_authority()
 	$Head/Camera3D.current = is_me
-	$"Mesh".visible = !is_me
+	#model_controller.change_visibility(is_me)
 
 func _self_delete():
 	queue_free()
@@ -64,12 +64,12 @@ func movement(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 	if Input.is_action_just_pressed("sneak") and not sneaking:
-		Anim.play("Sneak")
+		#Anim.play("Sneak")
 		sneaking = true
 	var releasedSneak = Input.is_action_just_released("sneak")
 	var leftRoofCollision = just_exited and sneaking and not Input.is_action_pressed("sneak")
 	if (releasedSneak or leftRoofCollision) and body_count == 0:
-		Anim.play_backwards("Sneak")
+		#Anim.play_backwards("Sneak")
 		just_exited = false
 		sneaking = false
 	if Input.is_action_pressed("sneak"):
