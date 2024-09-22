@@ -28,9 +28,6 @@ properties/3/path = NodePath(".:speed")
 properties/3/spawn = true
 properties/3/replication_mode = 1
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_2iguh"]
-size = Vector3(0.730002, 0.819328, 0.324371)
-
 [sub_resource type="Animation" id="Animation_oov3i"]
 resource_name = "Hold AR"
 
@@ -408,15 +405,20 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_2iguh"]
+size = Vector3(0.730002, 0.819328, 0.324371)
+
 [node name="Player" type="CharacterBody3D" groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.638179, 0)
 collision_layer = 2
 collision_priority = 2.0
 axis_lock_angular_x = true
 axis_lock_angular_z = true
 floor_stop_on_slope = false
+floor_block_on_wall = false
 script = ExtResource("1_ay81r")
 headPath = NodePath("Head")
-model_controller_path = NodePath("Defender")
+skin_path = NodePath("Skin")
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00552368, 0, 0.0133758)
@@ -427,12 +429,11 @@ shape = SubResource("BoxShape3D_jwv4p")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6457, -0.121609)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.198131, 1.86137)
 attributes = SubResource("CameraAttributesPractical_rf3d0")
 current = true
 fov = 60.0
 
-[node name="Cursor" type="RayCast3D" parent="Head/Camera3D"]
+[node name="Cursor" type="RayCast3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 target_position = Vector3(0, -30, 0)
 
@@ -442,7 +443,7 @@ script = ExtResource("2_hfe6j")
 
 [node name="Assault Rifle" parent="Head/Hand" instance=ExtResource("3_43146")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.6, 0, 0, 0)
-cursor_path = NodePath("../../Camera3D/Cursor")
+cursor_path = NodePath("../../Cursor")
 
 [node name="Hud" type="Control" parent="."]
 layout_mode = 3
@@ -467,27 +468,18 @@ script = ExtResource("4_hseru")
 replication_config = SubResource("SceneReplicationConfig_75a4a")
 visibility_update_mode = 1
 
-[node name="Area3D" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35994, 0)
-visible = false
+[node name="Skin" type="Node3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00615931, -0.761188, 0.0128326)
-shape = SubResource("BoxShape3D_2iguh")
-
-[node name="Position" type="Marker3D" parent="."]
-
-[node name="Defender" type="Node3D" parent="."]
-
-[node name="Arms" type="AnimationPlayer" parent="Defender"]
+[node name="Arms" type="AnimationPlayer" parent="Skin"]
+root_node = NodePath("")
 libraries = {
 "": SubResource("AnimationLibrary_7ocw5")
 }
 
-[node name="Legs" type="AnimationPlayer" parent="Defender"]
+[node name="Legs" type="AnimationPlayer" parent="Skin"]
 root_node = NodePath("../Arms")
 
-[node name="Skeleton3D" type="Skeleton3D" parent="Defender"]
+[node name="Skeleton3D" type="Skeleton3D" parent="Skin"]
 transform = Transform3D(-100, -1.50996e-05, -6.60024e-13, 0, -4.37114e-06, 100, -1.50996e-05, 100, 4.37114e-06, 0, -0.0100389, 0)
 bones/0/name = "Root"
 bones/0/parent = -1
@@ -1043,25 +1035,33 @@ bones/78/position = Vector3(0, 0.00177336, 0)
 bones/78/rotation = Quaternion(0, 6.77626e-21, 0, 1)
 bones/78/scale = Vector3(1, 1, 1)
 
-[node name="Swat_Legs" type="MeshInstance3D" parent="Defender/Skeleton3D"]
+[node name="Swat_Legs" type="MeshInstance3D" parent="Skin/Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -8.47033e-22, 0, 1, 4.23516e-22, -4.36931e-08, -0.000418334)
 mesh = SubResource("ArrayMesh_woixq")
 skin = SubResource("Skin_elwtv")
 
-[node name="Swat_Feet" type="MeshInstance3D" parent="Defender/Skeleton3D"]
+[node name="Swat_Feet" type="MeshInstance3D" parent="Skin/Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -8.47033e-22, 0, 1, 4.23516e-22, -4.36931e-08, -0.000418334)
 mesh = SubResource("ArrayMesh_j8lyv")
 skin = SubResource("Skin_elwtv")
 
-[node name="Swat_Body" type="MeshInstance3D" parent="Defender/Skeleton3D"]
+[node name="Swat_Body" type="MeshInstance3D" parent="Skin/Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -8.47033e-22, 0, 1, 4.23516e-22, -4.36931e-08, -0.000418334)
 mesh = SubResource("ArrayMesh_qn3fg")
 skin = SubResource("Skin_elwtv")
 
-[node name="Swat_Head" type="MeshInstance3D" parent="Defender/Skeleton3D"]
+[node name="Swat_Head" type="MeshInstance3D" parent="Skin/Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -8.47033e-22, 0, 1, 4.23516e-22, -4.36931e-08, -0.000418334)
 mesh = SubResource("ArrayMesh_cd0o0")
 skin = SubResource("Skin_elwtv")
 
-[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
-[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
+[node name="Head Collider" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35994, 0)
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00615931, -0.761188, 0.0128326)
+shape = SubResource("BoxShape3D_2iguh")
+
+[connection signal="body_entered" from="Head Collider" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Head Collider" to="." method="_on_area_3d_body_exited"]

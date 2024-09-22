@@ -1,6 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c8ii4svhsjdon"]
-
-[ext_resource type="PackedScene" uid="uid://suq0je34xoqw" path="res://Player/player.tscn" id="1_cp0d1"]
+[gd_scene load_steps=9 format=3 uid="uid://c8ii4svhsjdon"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gfepk"]
 
@@ -131,7 +129,7 @@ offset_bottom = -288.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
-text = "\"Terrorism Stops NOW\", Officals say... America's terrorism issue has only gotten worse, with the discovery of the High Power Ballistic Nullified Pneumatic Nail Gun x86 with a High Precision Dot Sight shooting 16-Gauge leaded Nails; the 50 Pound Tactical Air Tank has been banned."
+text = "\"Terrorism Stops NOW\", Officals say... America's terrorism issue has only gotten worse, with the discovery of the High Power Ballistic Nullified Pneumatic Nail Gun x86 with a High Precision Dot Sight shooting 16-Gauge leaded Nails; the 50 Pound \"Tactical\" Air Tank has been banned."
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Billboard"]
 shape = SubResource("BoxShape3D_8ta2l")
@@ -139,6 +137,3 @@ shape = SubResource("BoxShape3D_8ta2l")
 [node name="Billboard Mesh" type="MeshInstance3D" parent="Billboard"]
 mesh = SubResource("BoxMesh_ht7qw")
 skeleton = NodePath("../..")
-
-[node name="Player" parent="." instance=ExtResource("1_cp0d1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.83295, 1.02264, -9.62471)
